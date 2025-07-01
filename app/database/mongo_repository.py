@@ -75,6 +75,11 @@ class MongoBedRepository(BedRepository):
         result = self.collection.delete_one({"_id": bed_id})
         return result.deleted_count > 0
 
+    async def delete_all_beds(self) -> int:
+        """Delete all beds from MongoDB"""
+        result = self.collection.delete_many({})
+        return result.deleted_count
+
     def close(self):
         """Close the MongoDB connection"""
         self.client.close()

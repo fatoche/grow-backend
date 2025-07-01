@@ -19,6 +19,27 @@ async def create_beds(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.post("/beds/with-cleanup", response_model=BedCreationResponse)
+async def create_beds_with_cleanup(
+    request: BedCreationRequest, bed_service: BedService = Depends(get_bed_service)
+) -> BedCreationResponse:
+    """Delete all existing beds and create new ones"""
+    try:
+        return await bed_service.create_beds_with_cleanup(request)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/beds/all")
+async def delete_all_beds(bed_service: BedService = Depends(get_bed_service)) -> dict:
+    """Delete all beds"""
+    try:
+        deleted_count = await bed_service.delete_all_beds()
+        return {"message": f"Successfully deleted {deleted_count} beds"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/beds", response_model=List[Bed])
 async def get_all_beds(bed_service: BedService = Depends(get_bed_service)) -> List[Bed]:
     """Get all beds"""

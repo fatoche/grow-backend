@@ -24,6 +24,16 @@ class BedService:
         message = f"Successfully created {len(created_beds)} beds"
         return BedCreationResponse(beds=created_beds, message=message)
 
+    async def create_beds_with_cleanup(
+        self, request: BedCreationRequest
+    ) -> BedCreationResponse:
+        """Delete all existing beds and create new ones"""
+        # Delete all existing beds
+        deleted_count = await self.bed_repository.delete_all_beds()
+
+        # Create new beds
+        return await self.create_beds(request)
+
     async def get_all_beds(self) -> List[Bed]:
         """Get all beds"""
         return await self.bed_repository.get_all_beds()
@@ -45,3 +55,7 @@ class BedService:
     async def delete_bed(self, bed_id: str) -> bool:
         """Delete a bed"""
         return await self.bed_repository.delete_bed(bed_id)
+
+    async def delete_all_beds(self) -> int:
+        """Delete all beds"""
+        return await self.bed_repository.delete_all_beds()

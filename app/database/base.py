@@ -35,3 +35,8 @@ class BedRepository(ABC):
     async def delete_bed(self, bed_id: str) -> bool:
         """Delete a bed from the database"""
         pass
+
+    @abstractmethod
+    async def delete_all_beds(self) -> int:
+        """Delete all beds from the database and return the number of deleted beds"""
+        pass
