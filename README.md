@@ -73,6 +73,8 @@ Once running, visit:
 ### Bed Management
 
 - `POST /garden/beds` - Create multiple beds
+- `POST /garden/beds/with-cleanup` - Delete all existing beds and create new ones
+- `DELETE /garden/beds/all` - Delete all beds
 - `GET /garden/beds` - Get all beds
 - `GET /garden/beds/{bed_id}` - Get a specific bed
 - `PUT /garden/beds/{bed_id}` - Update a bed
@@ -90,11 +92,20 @@ Once running, visit:
 ```json
 {
   "_id": "bed_12345678",
+  "index": 1,
   "length": 200,
   "width": 120,
   "plant_families": []
 }
 ```
+
+**Field Descriptions:**
+
+- `_id`: Unique identifier for the bed
+- `index`: User-readable bed number (1-based, sequential)
+- `length`: Length of the bed in centimeters
+- `width`: Width of the bed in centimeters
+- `plant_families`: Array of plant families (currently empty)
 
 ## Adding a New Database
 

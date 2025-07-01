@@ -24,15 +24,17 @@ class MongoBedRepository(BedRepository):
         """Convert MongoDB document to Bed model"""
         return Bed(
             id=doc["_id"],
+            index=doc["index"],
             length=doc["length"],
             width=doc["width"],
             plant_families=doc.get("plant_families", []),
         )
 
-    def _bed_to_document(self, bed: BedCreate) -> dict:
+    def _bed_to_document(self, bed: BedCreate, index: int) -> dict:
         """Convert BedCreate model to MongoDB document"""
         return {
             "_id": self._generate_id(),
+            "index": index,
             "length": bed.length,
             "width": bed.width,
             "plant_families": [],
@@ -40,15 +42,29 @@ class MongoBedRepository(BedRepository):
 
     async def create_bed(self, bed: BedCreate) -> Bed:
         """Create a single bed in MongoDB"""
-        document = self._bed_to_document(bed)
+        # Get the next available index
+        max_index = await self._get_max_index()
+        index = max_index + 1
+
+        document = self._bed_to_document(bed, index)
         result = self.collection.insert_one(document)
         return self._document_to_bed(document)
 
     async def create_multiple_beds(self, beds: List[BedCreate]) -> List[Bed]:
         """Create multiple beds in MongoDB"""
-        documents = [self._bed_to_document(bed) for bed in beds]
+        # Since this is called after delete_all_beds, we start from index 1
+        documents = []
+        for i, bed in enumerate(beds):
+            index = i + 1
+            documents.append(self._bed_to_document(bed, index))
+
         result = self.collection.insert_many(documents)
         return [self._document_to_bed(doc) for doc in documents]
+
+    async def _get_max_index(self) -> int:
+        """Get the maximum index currently in the database"""
+        result = self.collection.find_one(sort=[("index", -1)])
+        return result["index"] if result else 0
 
     async def get_bed_by_id(self, bed_id: str) -> Optional[Bed]:
         """Get a bed by its ID from MongoDB"""
@@ -59,7 +75,7 @@ class MongoBedRepository(BedRepository):
 
     async def get_all_beds(self) -> List[Bed]:
         """Get all beds from MongoDB"""
-        documents = self.collection.find()
+        documents = self.collection.find().sort("index", 1)
         return [self._document_to_bed(doc) for doc in documents]
 
     async def update_bed(self, bed_id: str, bed: BedCreate) -> Optional[Bed]:

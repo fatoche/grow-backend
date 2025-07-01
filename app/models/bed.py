@@ -13,6 +13,7 @@ class BedCreate(BedBase):
 
 class Bed(BedBase):
     id: str = Field(..., description="Unique identifier for the bed")
+    index: int = Field(..., description="User-readable bed index (1-based)")
     plant_families: List[str] = Field(
         default_factory=list, description="List of plant families in this bed"
     )
