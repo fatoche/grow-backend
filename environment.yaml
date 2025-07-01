@@ -4,5 +4,7 @@ channels:
 dependencies:
   - python>3.10
   - fastapi
+  - uvicorn
   - pymongo
-  - pip
+  - pydantic
+  - python-dotenv
