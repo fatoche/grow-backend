@@ -1,4 +1,5 @@
 import os
+import click
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -38,7 +39,13 @@ async def health_check():
     return {"status": "healthy"}
 
 
-if __name__ == "__main__":
+@click.command()
+@click.option("--reload", is_flag=True, default=False)
+def main(reload: bool):
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=reload)
+
+
+if __name__ == "__main__":
+    main()
