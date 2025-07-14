@@ -6,6 +6,7 @@ from mongoengine import connect
 from app.dependencies import get_mongo_uri
 
 from app.api.bed_routes import router as bed_router
+from app.api.plant_family_routes import router as plant_family_router
 
 # Load environment variables
 load_dotenv("local.env")
@@ -32,6 +33,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(bed_router)
+app.include_router(plant_family_router)
 
 
 @app.get("/")
