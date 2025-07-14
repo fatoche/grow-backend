@@ -24,6 +24,10 @@ class PlantFamilyService:
             raise ValueError(f"Plant family with ID {plant_family_id} not found")
         return plant_family
 
+    async def get_all_plant_families(self) -> List[PlantFamily]:
+        """Get all plant families"""
+        return await self.plant_family_repository.get_all_plant_families()
+
     async def delete_plant_family(self, plant_family_id: str) -> bool:
         """Delete a plant family"""
         return await self.plant_family_repository.delete_plant_family(plant_family_id)

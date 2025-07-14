@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from app.database.base.plant_family import PlantFamilyRepository
 from mongoengine import Document, StringField, IntField
 
@@ -42,6 +42,11 @@ class MongoPlantFamilyRepository(PlantFamilyRepository):
         if mongo_doc:
             return PlantFamilyModel.model_validate(mongo_doc)
         return None
+
+    async def get_all_plant_families(self) -> List[PlantFamilyModel]:
+        """Get all plant families"""
+        mongo_docs = PlantFamily.objects.all()
+        return [PlantFamilyModel.model_validate(doc) for doc in mongo_docs]
 
     async def delete_plant_family(self, plant_family_id: str) -> bool:
         mongo_doc = self._get_plant_family_by_id(plant_family_id)

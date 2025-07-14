@@ -8,6 +8,17 @@ from app.dependencies import get_plant_family_service
 router = APIRouter(prefix="/plants", tags=["plants"])
 
 
+@router.get("/families", response_model=List[PlantFamily])
+async def get_all_plant_families(
+    plant_family_service: PlantFamilyService = Depends(get_plant_family_service),
+) -> List[PlantFamily]:
+    """Get all plant families"""
+    try:
+        return await plant_family_service.get_all_plant_families()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/families", response_model=PlantFamily)
 async def create_plant_family(
     plant_family_data: PlantFamilyCreate,

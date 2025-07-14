@@ -10,13 +10,18 @@ class PlantFamilyRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_plant_family_by_id(self, plant_family_id: str) -> Optional[PlantFamily]:
+    async def get_plant_family_by_id(
+        self, plant_family_id: str
+    ) -> Optional[PlantFamily]:
         """Get a plant family by its ID"""
+        pass
+
+    @abstractmethod
+    async def get_all_plant_families(self) -> List[PlantFamily]:
+        """Get all plant families"""
         pass
 
     @abstractmethod
     async def delete_plant_family(self, plant_family_id: str) -> bool:
         """Delete a plant family"""
         pass
-    
-    
