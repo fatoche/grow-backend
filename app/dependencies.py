@@ -1,6 +1,6 @@
 import os
 from functools import lru_cache
-from app.database.mongo_repository import MongoBedRepository
+from app.database.mongo.bed import MongoBedRepository
 from app.services.bed_service import BedService
 
 

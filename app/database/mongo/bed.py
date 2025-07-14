@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
 
-from app.database.base import BedRepository
+from app.database.base.bed import BedRepository
 from app.models.bed import Bed, BedCreate
 
 

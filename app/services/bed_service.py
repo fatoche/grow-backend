@@ -1,5 +1,5 @@
 from typing import List
-from app.database.base import BedRepository
+from app.database.base.bed import BedRepository
 from app.models.bed import Bed, BedCreate, BedCreationRequest, BedCreationResponse
 
 
