@@ -5,6 +5,9 @@ dependencies:
   - python>3.10
   - fastapi
   - uvicorn
-  - pymongo
   - pydantic
   - python-dotenv
+
+  # Databases
+  - pymongo
+  - mongoengine
