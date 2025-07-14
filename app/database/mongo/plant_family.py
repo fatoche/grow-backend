@@ -1,13 +1,8 @@
 from app.database.base.plant_family import PlantFamilyRepository
-from app.dependencies import get_mongo_uri
-from mongoengine import connect, Document, StringField, IntField
+from mongoengine import Document, StringField, IntField
 
 from app.models.plant_family import PlantFamilyCreate
 from app.models.plant_family import PlantFamily as PlantFamilyModel
-
-
-
-connect(host=get_mongo_uri(), db="grow")
 
 
 class PlantFamily(Document):

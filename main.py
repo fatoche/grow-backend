@@ -1,13 +1,18 @@
-import os
 import click
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from mongoengine import connect
+from app.dependencies import get_mongo_uri
 
 from app.api.bed_routes import router as bed_router
 
 # Load environment variables
 load_dotenv("local.env")
+
+
+# Connect to mongoengine
+connect(host=get_mongo_uri(), db="grow")
 
 # Create FastAPI app
 app = FastAPI(
