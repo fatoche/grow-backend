@@ -1,8 +1,7 @@
-from typing import Any
-from pydantic import BaseModel
+from app.models.base_model import BusinessModelBase
 
 
-class PlantFamilyBase(BaseModel):
+class PlantFamilyBase(BusinessModelBase):
     name: str
     nutrition_requirements: str
     rotation_time: int
@@ -10,14 +9,6 @@ class PlantFamilyBase(BaseModel):
 
 class PlantFamily(PlantFamilyBase):
     id: str
-
-    class Config:
-        from_attributes = True
-
-    @classmethod
-    def model_validate(cls, obj: Any, **kwargs) -> "PlantFamily":
-        obj.id = str(obj.id)
-        return super().model_validate(obj, **kwargs)
 
 
 class PlantFamilyCreate(PlantFamilyBase):
