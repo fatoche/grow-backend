@@ -35,7 +35,7 @@ async def create_plant_family(
 async def delete_plant_family(
     plant_family_id: str,
     plant_family_service: PlantFamilyService = Depends(get_plant_family_service),
-) -> dict:
+):
     """Delete a plant family"""
     try:
         success = await plant_family_service.delete_plant_family(plant_family_id)
@@ -44,7 +44,6 @@ async def delete_plant_family(
                 status_code=404,
                 detail=f"Plant family with ID {plant_family_id} not found",
             )
-        return {"message": f"Plant family {plant_family_id} deleted successfully"}
     except HTTPException:
         raise
     except Exception as e:
