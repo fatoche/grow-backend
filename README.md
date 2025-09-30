@@ -15,15 +15,15 @@ The backend follows a clean architecture pattern with the following layers:
 
 The application uses a database-agnostic interface (`BedRepository`) that allows easy switching between different databases:
 
-- **MongoDB Implementation**: `MongoBedRepository` (currently used)
-- **Future**: Easy to add PostgreSQL, SQLite, or other database implementations
+- **PostgreSQL Implementation**: `SQLBedRepository` (currently used)
+- **Alternative**: Easy to add MongoDB, SQLite, or other database implementations
 
 ## Setup
 
 ### Prerequisites
 
 - Python 3.10+
-- MongoDB cluster (accessible via MONGO_URI)
+- PostgreSQL database (accessible via DATABASE_URL)
 
 ### Installation
 
@@ -41,10 +41,19 @@ The application uses a database-agnostic interface (`BedRepository`) that allows
 
 ### Environment Variables
 
-Create a `local.env` file with your MongoDB URI:
+Create a `local.env` file with your PostgreSQL connection string:
 
 ```
-MONGO_URI="your_mongodb_connection_string"
+DATABASE_URL="postgresql://username:password@localhost:5432/grow_db"
+```
+
+### Database Setup
+
+After setting up your environment variables, run the database migrations:
+
+```bash
+# Initialize the database with the schema
+alembic upgrade head
 ```
 
 ## Running the Application
@@ -87,38 +96,62 @@ Once running, visit:
 
 ## Database Schema
 
-### Beds Collection
+### Tables
 
-```json
-{
-  "_id": "bed_12345678",
-  "index": 1,
-  "length": 200,
-  "width": 120,
-  "plant_families": []
-}
+#### beds
+
+```sql
+CREATE TABLE beds (
+    id SERIAL PRIMARY KEY,
+    length INTEGER NOT NULL,
+    width INTEGER NOT NULL,
+    index INTEGER NOT NULL UNIQUE
+);
+```
+
+#### plant_families
+
+```sql
+CREATE TABLE plant_families (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL UNIQUE,
+    nutrition_requirements TEXT NOT NULL,
+    rotation_time INTEGER NOT NULL
+);
+```
+
+#### bed_plant_family (junction table)
+
+```sql
+CREATE TABLE bed_plant_family (
+    bed_id INTEGER REFERENCES beds(id),
+    plant_family_id INTEGER REFERENCES plant_families(id),
+    PRIMARY KEY (bed_id, plant_family_id)
+);
 ```
 
 **Field Descriptions:**
 
-- `_id`: Unique identifier for the bed
-- `index`: User-readable bed number (1-based, sequential)
-- `length`: Length of the bed in centimeters
-- `width`: Width of the bed in centimeters
-- `plant_families`: Array of plant families (currently empty)
+- `beds.id`: Auto-incrementing primary key
+- `beds.index`: User-readable bed number (1-based, sequential, unique)
+- `beds.length`: Length of the bed in centimeters
+- `beds.width`: Width of the bed in centimeters
+- `plant_families.name`: Name of the plant family (unique)
+- `plant_families.nutrition_requirements`: Text description of nutritional needs
+- `plant_families.rotation_time`: Time in months before rotating crops
 
 ## Adding a New Database
 
-To add support for a new database:
+The application currently uses PostgreSQL. To add support for a different database:
 
 1. Create a new repository class implementing `BedRepository`
 2. Update `dependencies.py` to use the new repository
 3. The service layer remains unchanged
 
-Example:
+Example for adding SQLite support:
 
 ```python
-class PostgresBedRepository(BedRepository):
+class SQLiteBedRepository(BedRepository):
     # Implement all abstract methods
     pass
 ```
