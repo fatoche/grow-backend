@@ -13,3 +13,8 @@ dependencies:
   - sqlalchemy
   - alembic
   - asyncpg
+
+  # Testing
+  - pytest
+  - pytest-asyncio
+  - httpx
