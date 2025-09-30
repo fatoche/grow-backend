@@ -8,7 +8,7 @@ class PlantFamilyBase(BusinessModelBase):
 
 
 class PlantFamily(PlantFamilyBase):
-    id: str
+    id: int
 
 
 class PlantFamilyCreate(PlantFamilyBase):

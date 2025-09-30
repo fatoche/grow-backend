@@ -51,7 +51,7 @@ async def get_all_beds(bed_service: BedService = Depends(get_bed_service)) -> Li
 
 @router.get("/beds/{bed_id}", response_model=Bed)
 async def get_bed_by_id(
-    bed_id: str, bed_service: BedService = Depends(get_bed_service)
+    bed_id: int, bed_service: BedService = Depends(get_bed_service)
 ) -> Bed:
     """Get a bed by ID"""
     try:
@@ -64,7 +64,7 @@ async def get_bed_by_id(
 
 @router.put("/beds/{bed_id}", response_model=Bed)
 async def update_bed(
-    bed_id: str, bed_data: BedCreate, bed_service: BedService = Depends(get_bed_service)
+    bed_id: int, bed_data: BedCreate, bed_service: BedService = Depends(get_bed_service)
 ) -> Bed:
     """Update a bed"""
     try:
@@ -77,7 +77,7 @@ async def update_bed(
 
 @router.delete("/beds/{bed_id}")
 async def delete_bed(
-    bed_id: str, bed_service: BedService = Depends(get_bed_service)
+    bed_id: int, bed_service: BedService = Depends(get_bed_service)
 ) -> dict:
     """Delete a bed"""
     try:

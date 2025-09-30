@@ -66,7 +66,7 @@ class MongoBedRepository(BedRepository):
         result = self.collection.find_one(sort=[("index", -1)])
         return result["index"] if result else 0
 
-    async def get_bed_by_id(self, bed_id: str) -> Optional[Bed]:
+    async def get_bed_by_id(self, bed_id: int) -> Optional[Bed]:
         """Get a bed by its ID from MongoDB"""
         document = self.collection.find_one({"_id": bed_id})
         if document:
@@ -78,7 +78,7 @@ class MongoBedRepository(BedRepository):
         documents = self.collection.find().sort("index", 1)
         return [self._document_to_bed(doc) for doc in documents]
 
-    async def update_bed(self, bed_id: str, bed: BedCreate) -> Optional[Bed]:
+    async def update_bed(self, bed_id: int, bed: BedCreate) -> Optional[Bed]:
         """Update a bed in MongoDB"""
         update_data = {"length": bed.length, "width": bed.width}
         result = self.collection.update_one({"_id": bed_id}, {"$set": update_data})
@@ -86,7 +86,7 @@ class MongoBedRepository(BedRepository):
             return await self.get_bed_by_id(bed_id)
         return None
 
-    async def delete_bed(self, bed_id: str) -> bool:
+    async def delete_bed(self, bed_id: int) -> bool:
         """Delete a bed from MongoDB"""
         result = self.collection.delete_one({"_id": bed_id})
         return result.deleted_count > 0

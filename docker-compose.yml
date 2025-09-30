@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: grow-backend-postgres
+    environment:
+      POSTGRES_DB: grow_db
+      POSTGRES_USER: grow_user
+      POSTGRES_PASSWORD: grow_password
+    ports:
+      - "5434:5432" # External port 5434 to avoid conflicts with other projects
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - grow-network
+    restart: unless-stopped
+
+  backend:
+    build: .
+    container_name: grow-backend
+    environment:
+      DATABASE_URL: postgresql://grow_user:grow_password@postgres:5432/grow_db
+      ENVIRONMENT: development
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - grow-network
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    command: python main.py --reload
+
+volumes:
+  postgres_data:
+
+networks:
+  grow-network:
+    driver: bridge

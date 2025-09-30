@@ -17,7 +17,7 @@ class BedRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_bed_by_id(self, bed_id: str) -> Optional[Bed]:
+    async def get_bed_by_id(self, bed_id: int) -> Optional[Bed]:
         """Get a bed by its ID"""
         pass
 
@@ -27,12 +27,12 @@ class BedRepository(ABC):
         pass
 
     @abstractmethod
-    async def update_bed(self, bed_id: str, bed: BedCreate) -> Optional[Bed]:
+    async def update_bed(self, bed_id: int, bed: BedCreate) -> Optional[Bed]:
         """Update a bed in the database"""
         pass
 
     @abstractmethod
-    async def delete_bed(self, bed_id: str) -> bool:
+    async def delete_bed(self, bed_id: int) -> bool:
         """Delete a bed from the database"""
         pass
 
