@@ -87,5 +87,7 @@ async def delete_bed(
                 status_code=404, detail=f"Bed with ID {bed_id} not found"
             )
         return {"message": f"Bed {bed_id} deleted successfully"}
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
