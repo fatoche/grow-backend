@@ -74,18 +74,20 @@ pytest
 Integration tests should:
 
 - Use the `client` fixture for HTTP requests
-- Use the `clean_database` fixture to ensure a clean state
-- Use the `override_database_url` fixture to use the test database
 - Test the full request/response cycle
 - Be placed in `tests/integration/` mirroring the `app/` structure
+
+**Note:** The `clean_database` and `override_database_url` fixtures are automatically applied to all tests in `tests/integration/test_api/` via `autouse=True` in the local `conftest.py`. You don't need to include them in test signatures.
 
 Example:
 
 ```python
-def test_create_beds(client, clean_database, override_database_url):
+def test_create_beds(client):
     response = client.post("/garden/beds", json={...})
     assert response.status_code == 200
 ```
+
+If you need these fixtures in other integration test directories, add a similar `conftest.py` with autouse fixtures.
 
 ### Unit Tests
 
