@@ -12,3 +12,4 @@ dependencies:
   - psycopg2-binary
   - sqlalchemy
   - alembic
+  - asyncpg
