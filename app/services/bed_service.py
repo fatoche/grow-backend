@@ -29,7 +29,7 @@ class BedService:
     ) -> BedCreationResponse:
         """Delete all existing beds and create new ones"""
         # Delete all existing beds
-        deleted_count = await self.bed_repository.delete_all_beds()
+        await self.bed_repository.delete_all_beds()
 
         # Create new beds
         return await self.create_beds(request)
@@ -52,7 +52,7 @@ class BedService:
             raise ValueError(f"Bed with ID {bed_id} not found")
         return bed
 
-    async def delete_bed(self, bed_id: str) -> bool:
+    async def delete_bed(self, bed_id: int) -> bool:
         """Delete a bed"""
         return await self.bed_repository.delete_bed(bed_id)
 
