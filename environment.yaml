@@ -9,5 +9,8 @@ dependencies:
   - python-dotenv
 
   # Databases
+  - psycopg2-binary
+  - sqlalchemy
+  - alembic
   - pymongo
   - mongoengine
